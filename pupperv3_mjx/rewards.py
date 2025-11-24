@@ -123,10 +123,8 @@ def reward_stand_still(
     # # default_pose: jax.Array = jp.array(
         #     [0.26, 0.0, -0.52, -0.26, 0.0, 0.52, 0.26, 0.0, -0.52, -0.26, 0.0, 0.52] # assuming first 6 are front legs
         # ),
-    default_pose[7:]=0
-    joint_angles[7:]=0
     return jp.clip(
-        jp.sum(jp.abs(joint_angles - default_pose)) * (
+        jp.sum(jp.abs(joint_angles[:7] - default_pose[:7])) * ( # only compare after 7
             math.normalize(commands[:3])[1] < command_threshold
         ),
         -1000.0,
