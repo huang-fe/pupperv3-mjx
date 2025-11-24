@@ -39,7 +39,8 @@ def reward_orientation(x: Transform) -> jax.Array:
 
     #reward_stability(x: Transform):
     roll, _, yaw = math.quat_to_euler(x.rot[0])
-    return jp.exp(-(roll**2 + yaw**2))
+    #return jp.exp(-(roll**2 + yaw**2))
+    return jp.clip(roll**2 + yaw**2, -1000.0, 1000.0)
 
 def reward_torques(torques: jax.Array) -> jax.Array:
     # Penalize torques
