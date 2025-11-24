@@ -15,6 +15,12 @@ def reward_ang_vel_xy(xd: Motion) -> jax.Array:
     # Penalize xy axes base angular velocity
     return jp.clip(jp.sum(jp.square(xd.ang[0, :2])), -1000.0, 1000.0)
 
+# def reward_pitch_tracking(x: Transform, target_pitch: float, sigma: float = 0.2): # 
+#     # Extract pitch angle from quaternion
+#     _, pitch, _ = math.quat_to_euler(x.rot[0])  # (roll, pitch, yaw)
+
+#     error = (pitch - target_pitch) ** 2
+#     return jp.exp(-error / (sigma + EPS))
 
 def reward_tracking_orientation(
     desired_world_z_in_body_frame: jax.Array, x: Transform, tracking_sigma: float
@@ -25,13 +31,15 @@ def reward_tracking_orientation(
     error = jp.sum(jp.square(world_z_in_body_frame - desired_world_z_in_body_frame))
     return jp.clip(jp.exp(-error / (tracking_sigma + EPS)), -1000.0, 1000.0)
 
-
 def reward_orientation(x: Transform) -> jax.Array:
-    # Penalize non flat base orientation
-    up = jp.array([0.0, 0.0, 1.0])
-    rot_up = math.rotate(up, x.rot[0])
-    return jp.clip(jp.sum(jp.square(rot_up[:2])), -1000.0, 1000.0)
+    # # Penalize non flat base orientation
+    # up = jp.array([0.0, 0.0, 1.0])
+    # rot_up = math.rotate(up, x.rot[0])
+    # return jp.clip(jp.sum(jp.square(rot_up[:2])), -1000.0, 1000.0)
 
+    #reward_stability(x: Transform):
+    roll, _, yaw = math.quat_to_euler(x.rot[0])
+    return jp.exp(-(roll**2 + yaw**2))
 
 def reward_torques(torques: jax.Array) -> jax.Array:
     # Penalize torques
@@ -74,7 +82,6 @@ def reward_tracking_ang_vel(
     base_ang_vel = math.rotate(xd.ang[0], math.quat_inv(x.rot[0]))
     ang_vel_error = jp.square(commands[2] - base_ang_vel[2])
     return jp.clip(jp.exp(-ang_vel_error / (tracking_sigma + EPS)), -1000.0, 1000.0)
-
 
 def reward_feet_air_time(
     air_time: jax.Array,

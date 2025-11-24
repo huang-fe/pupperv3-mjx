@@ -100,7 +100,7 @@ class PupperV3Env(PipelineEnv):
         angular_velocity_range: Tuple[float, float] = (-2.0, 2.0),
         zero_command_probability: float = 0.01,
         stand_still_command_threshold: float = 0.1,
-        maximum_pitch_command: float = 0.0,  # degrees
+        maximum_pitch_command: float = np.pi/5,  # degrees
         maximum_roll_command: float = 0.0,  # degrees
         default_pose: jax.Array = jp.array(
             [0.26, 0.0, -0.52, -0.26, 0.0, 0.52, 0.26, 0.0, -0.52, -0.26, 0.0, 0.52]
