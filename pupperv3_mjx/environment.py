@@ -306,7 +306,7 @@ class PupperV3Env(PipelineEnv):
 
         rng, key_pitch, key_roll = jax.random.split(rng, 3)
         pitch = (
-            jax.random.uniform(key_pitch, (1,), minval=0.0, maxval=1.0) * self._maximum_pitch_command
+            jax.random.uniform(key_pitch, (1,), minval=-1.0, maxval=0.0) * self._maximum_pitch_command
             #jax.random.uniform(key_pitch, (1,), minval=-1, maxval=1.0) * self._maximum_pitch_command
         )
         roll = (
