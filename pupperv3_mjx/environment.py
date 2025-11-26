@@ -265,9 +265,12 @@ class PupperV3Env(PipelineEnv):
         ang_vel_yaw = self._angular_velocity_range  # min max [rad/s]
 
         rng, key1, key2, key3, key4, key5 = jax.random.split(rng, 6)
-        lin_vel_x = jax.random.uniform(key1, (1,), minval=lin_vel_x[0], maxval=lin_vel_x[1])
-        lin_vel_y = jax.random.uniform(key2, (1,), minval=lin_vel_y[0], maxval=lin_vel_y[1])
-        ang_vel_yaw = jax.random.uniform(key3, (1,), minval=ang_vel_yaw[0], maxval=ang_vel_yaw[1])
+        # lin_vel_x = jax.random.uniform(key1, (1,), minval=lin_vel_x[0], maxval=lin_vel_x[1])
+        # lin_vel_y = jax.random.uniform(key2, (1,), minval=lin_vel_y[0], maxval=lin_vel_y[1])
+        # ang_vel_yaw = jax.random.uniform(key3, (1,), minval=ang_vel_yaw[0], maxval=ang_vel_yaw[1])        
+        lin_vel_x = jax.random.uniform(key1, (1,), minval=0.0, maxval=0.0)
+        lin_vel_y = jax.random.uniform(key2, (1,), minval=0.0, maxval=0.0)
+        ang_vel_yaw = jax.random.uniform(key3, (1,), minval=0.0, maxval=0.0)
         new_cmd = jp.array([lin_vel_x[0], lin_vel_y[0], ang_vel_yaw[0]])
 
         # X% probability to return command near [0, 0, 0]
@@ -303,10 +306,11 @@ class PupperV3Env(PipelineEnv):
 
         rng, key_pitch, key_roll = jax.random.split(rng, 3)
         pitch = (
-            jax.random.uniform(key_pitch, (1,), minval=-1, maxval=1.0) * self._maximum_pitch_command
+            jax.random.uniform(key_pitch, (1,), minval=0.0, maxval=1.0) * self._maximum_pitch_command
+            #jax.random.uniform(key_pitch, (1,), minval=-1, maxval=1.0) * self._maximum_pitch_command
         )
         roll = (
-            jax.random.uniform(key_roll, (1,), minval=-1, maxval=1.0) * self._maximum_roll_command
+            jax.random.uniform(key_roll, (1,), minval=0.0, maxval=0.0) * self._maximum_roll_command
         )
         # rotate the z unit vector by pitch and roll
         # euler_to_quat uses x-y'-z'' intrinsic convention so use roll, pitch, yaw
