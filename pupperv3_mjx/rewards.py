@@ -124,7 +124,7 @@ def reward_stand_still(
         #     [0.26, 0.0, -0.52, -0.26, 0.0, 0.52, 0.26, 0.0, -0.52, -0.26, 0.0, 0.52] # assuming first 6 are front legs
         # ),
     return jp.clip(
-        jp.exp(-jp.abs(joint_angles[0:7] - default_pose[0:7])**2), #* ( # minimize
+        jp.exp(-jp.sum(jp.abs(joint_angles[0:7] - default_pose[0:7])**2)), #* ( # minimize
             #math.normalize(commands[:3])[1] < command_threshold
         #),
         -1000.0,
